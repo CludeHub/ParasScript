@@ -1,0 +1,148 @@
+-- made by Paul Paras
+local gui = Instance.new("ScreenGui")
+local frame = Instance.new("Frame")
+local buttonAutoParry = Instance.new("TextButton")
+local buttonManualSpam = Instance.new("TextButton")
+
+-- Setting up the GUI
+gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Frame properties
+frame.Size = UDim2.new(0.5, 0, 0.5, 0)
+frame.Position = UDim2.new(0.25, 0, 0.25, 0)
+frame.BackgroundColor3 = Color3.fromRGB(111, 78, 55) -- Coffee color
+frame.BorderColor3 = Color3.fromRGB(222, 184, 135) -- Blonde color
+frame.Parent = gui
+
+-- Button properties for Auto Parry
+buttonAutoParry.Size = UDim2.new(0.2, 0, 0.2, 0)
+buttonAutoParry.Position = UDim2.new(0.1, -39, 0, 3)
+buttonAutoParry.Text = "Auto Parry"
+buttonAutoParry.BackgroundColor3 = Color3.fromRGB(222, 184, 135) -- Blonde color
+buttonAutoParry.Parent = frame
+
+-- Button properties for Manual Spam
+buttonManualSpam.Size = UDim2.new(0.2, 0, 0.2, 0)
+buttonManualSpam.Position = UDim2.new(0.5, -39, 0, 3)
+buttonManualSpam.Text = "Manual Spam"
+buttonManualSpam.BackgroundColor3 = Color3.fromRGB(222, 184, 135) -- Blonde color
+buttonManualSpam.Parent = frame
+
+-- script
+
+local function QFCS_fake_script() -- Frame.Dragify
+    local script = Instance.new('LocalScript', frame)
+    
+    local UIS = game:GetService("UserInputService")
+    function dragify(Frame)
+        dragToggle = nil
+        local dragSpeed = 1
+        dragInput = nil
+        dragStart = nil
+        local dragPos = nil
+        function updateInput(input)
+            local Delta = input.Position - dragStart
+            local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+            game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.25), {Position = Position}):Play()
+        end
+        Frame.InputBegan:Connect(function(input)
+            if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and UIS:GetFocusedTextBox() == nil then
+                dragToggle = true
+                dragStart = input.Position
+                startPos = Frame.Position
+                input.Changed:Connect(function()
+                    if input.UserInputState == Enum.UserInputState.End then
+                        dragToggle = false
+                    end
+                end)
+            end
+        end)
+        Frame.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                dragInput = input
+            end
+        end)
+        game:GetService("UserInputService").InputChanged:Connect(function(input)
+            if input == dragInput and dragToggle then
+                updateInput(input)
+            end
+        end)
+    end
+    
+    dragify(script.Parent)
+end
+coroutine.wrap(QFCS_fake_script)()
+
+-- Function para sa Auto Parry button
+buttonAutoParry.MouseButton1Click:Connect(function()
+    local RunService = game:GetService("RunService") or game:FindFirstDescendant("RunService")
+    local Players = game:GetService("Players") or game:FindFirstDescendant("Players")
+    local VirtualInputManager = game:GetService("VirtualInputManager") or game:FindFirstDescendant("VirtualInputManager")
+
+    local Player = Players.LocalPlayer
+
+    local Cooldown = tick()
+    local IsParried = false
+    local Connection = nil
+
+    local function GetBall()
+        for _, Ball in ipairs(workspace.Balls:GetChildren()) do
+            if Ball:GetAttribute("realBall") then
+                return Ball
+            end
+        end
+    end
+
+    local function ResetConnection()
+        if Connection then
+            Connection:Disconnect()
+            Connection = nil
+        end
+    end
+
+    workspace.Balls.ChildAdded:Connect(function()
+        local Ball = GetBall()
+        if not Ball then return end
+        ResetConnection()
+        Connection = Ball:GetAttributeChangedSignal("target"):Connect(function()
+            Parried = false
+        end)
+    end)
+
+    RunService.PreSimulation:Connect(function()
+        local Ball, HRP = GetBall(), Player.Character.HumanoidRootPart
+        if not Ball or not HRP then
+            return
+        end
+        
+        local Speed = Ball.zoomies.VectorVelocity.Magnitude
+        local Distance = (HRP.Position - Ball.Position).Magnitude
+        
+        if Ball:GetAttribute("target") == Player.Name and not Parried and Distance / Speed <= 0.55 then
+            VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)
+            Parried = true
+            Cooldown = tick()
+            
+            if (tick() - Cooldown) >= 1 then
+                Parried = false
+            end
+        end
+    end)
+    game:GetService("StarterGui"):SetCore("SendNotification", { 
+        Title = "Auto Parry Activated";
+        Text = "can't be turn off";
+        Icon = "rbxthumb://type=Asset&id=15018630102&w=150&h=150"})
+    Duration = 10;
+    while true do
+        print("Auto Parry activated!")
+        wait(0.1)
+    end
+end)
+
+-- Function para sa Manual Spam button
+buttonManualSpam.MouseButton1Click:Connect(function()
+    while true do
+        print("Manual Spam activated!")
+        wait(0.1)
+    end
+end)
