@@ -18,12 +18,12 @@ frame.Parent = gui
 buttonAutoParry.Size = UDim2.new(0.2, 0, 0.2, 0)
 buttonAutoParry.Position = UDim2.new(0.1, -39, 0, 3)
 buttonAutoParry.Text = "Auto Parry"
-buttonAutoParry.BackgroundColor3 = Color3.fromRGB(222, 184, 135) -- Blonde color
+buttonAutoParry.BackgroundColor3 = Color3.fromRGB(222, 184, 135)
 buttonAutoParry.Parent = frame
 
 -- Button properties for Manual Spam
 buttonManualSpam.Size = UDim2.new(0.2, 0, 0.2, 0)
-buttonManualSpam.Position = UDim2.new(0.5, -39, 0, 3)
+buttonManualSpam.Position = UDim2.new(0.5, -119, 0, 3)
 buttonManualSpam.Text = "Manual Spam"
 buttonManualSpam.BackgroundColor3 = Color3.fromRGB(222, 184, 135) -- Blonde color
 buttonManualSpam.Parent = frame
@@ -144,7 +144,7 @@ buttonManualSpam.MouseButton1Click:Connect(function()
  local gui, frame, button = Instance.new("ScreenGui", game.CoreGui), Instance.new("Frame"), Instance.new("TextButton")
 gui.ResetOnSpawn = false
 frame.Size, frame.Position, frame.BackgroundColor3, frame.BorderSizePixel, frame.Active, frame.Draggable, frame.Parent = UDim2.new(0, 150, 0, 75), UDim2.new(0, 10, 0, 10), Color3.new(0, 0, 0), 0, true, true, gui
-button.Text, button.Size, button.Position, button.BackgroundColor3, button.BorderColor3, button.BorderSizePixel, button.Font, button.TextColor3, button.TextSize, button.Parent = "Manual spam", UDim2.new(1, -20, 1, -20), UDim2.new(0, 10, 0, 10), Color3.new(0, 0, 0), Color3.new(), 2, Enum.Font.SourceSans, Color3.new(1, 1, 1), 16, frame
+button.Text, button.Size, button.Position, button.BackgroundColor3, button.BorderColor3, button.BorderSizePixel, button.Font, button.TextColor3, button.TextSize, button.Parent = "Manual spam", UDim2.new(1, -20, 1, -20), UDim2.new(0, 10, 0, 10), Color3.new(111, 78, 55), Color3.new(), 2, Enum.Font.SourceSans, Color3.new(222, 184, 135), 16, frame
 
 local activated = false
 
@@ -162,7 +162,4 @@ button.MouseButton1Click:Connect(function()
     toggle()
     showNotification()
 end)
-        print("Manual Spam activated!")
-        wait(0.1)
-    end
 end)
