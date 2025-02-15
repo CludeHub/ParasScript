@@ -1,4 +1,5 @@
--- made by Paul Paras
+if game.PlaceId == 14732610803 or game.PlaceId == 15234596844 or game.PlaceId == 13772394625 then
+    -- made by Paul Paras
 local gui = Instance.new("ScreenGui")
 local frame = Instance.new("Frame")
 local buttonAutoParry = Instance.new("TextButton")
@@ -6,6 +7,7 @@ local buttonManualSpam = Instance.new("TextButton")
 local explosionbutton = Instance.new("TextButton")
 local swordbutton = Instance.new("TextButton")
 local text = Instance.new("TextButton")
+local speedTextbox = Instance.new("TextBox")
 
 -- Setting up the GUI
 gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -186,3 +188,20 @@ local args = {
 game:GetService("ReplicatedStorage").Remote.RemoteFunction:InvokeServer(unpack(args))
 print("Sword Chess Purchased")
 end)
+
+-- Speed TextBox properties
+speedTextbox.Size = UDim2.new(0, 200, 0, 50)
+speedTextbox.Position = UDim2.new(0.5, -10, 0.5, -25)
+speedTextbox.PlaceholderText = "Enter Speed"
+speedTextbox.BackgroundColor3 = Color3.fromRGB(222, 184, 135) -- Blonde color
+speedTextbox.Parent = frame
+
+speedTextbox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local speedValue = tonumber(speedTextbox.Text)
+        if speedValue then
+            Player.Character.Humanoid.WalkSpeed = speedValue
+        end
+    end
+end)
+end
