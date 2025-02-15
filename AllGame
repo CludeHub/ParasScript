@@ -3,6 +3,9 @@ local gui = Instance.new("ScreenGui")
 local frame = Instance.new("Frame")
 local buttonAutoParry = Instance.new("TextButton")
 local buttonManualSpam = Instance.new("TextButton")
+local explosionbutton = Instance.new("TextButton")
+local swordbutton = Instance.new("TextButton")
+local text = Instance.new("TextButton")
 
 -- Setting up the GUI
 gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -23,10 +26,30 @@ buttonAutoParry.Parent = frame
 
 -- Button properties for Manual Spam
 buttonManualSpam.Size = UDim2.new(0.2, 0, 0.2, 0)
-buttonManualSpam.Position = UDim2.new(0.5, -39, 0, 3)
+buttonManualSpam.Position = UDim2.new(0.5, -119, 0, 3)
 buttonManualSpam.Text = "Manual Spam"
 buttonManualSpam.BackgroundColor3 = Color3.fromRGB(222, 184, 135) -- Blonde color
 buttonManualSpam.Parent = frame
+
+explosionbutton.Size = UDim2.new(0.2, 0, 0.2, 0)
+explosionbutton.Position = UDim2.new(0.5, -119, 0, 67)
+explosionbutton.Text = "Explosion chess"
+explosionbutton.BackgroundColor3 = Color3.fromRGB(222, 184, 135) -- Blonde color
+explosionbutton.Parent = frame
+
+swordbutton.Size = UDim2.new(0.2, 0, 0.2, 0)
+swordbutton.Position = UDim2.new(0.1, -39, 0, 67)
+swordbutton.Text = "Sword Chess"
+swordbutton.BackgroundColor3 = Color3.fromRGB(222, 184, 135) -- Blonde color
+swordbutton.Parent = frame
+
+text.Size = UDim2.new(0.2, 0, 0.2, 0)
+text.Position = UDim2.new(0.3, -119, 0, 36)
+text.Text = "Chess And Spin"
+text.BackgroundColor3 = Color3.fromRGB(222, 184, 135) -- Blonde color
+text.TextTransparency = 0 -- Text is visible
+text.BackgroundTransparency = 1 -- Button is invisible
+text.Parent = frame
 
 -- script
 
@@ -73,7 +96,7 @@ local function QFCS_fake_script() -- Frame.Dragify
 end
 coroutine.wrap(QFCS_fake_script)()
 
--- Function para sa Auto Parry button
+-- Function for Auto Parry button
 buttonAutoParry.MouseButton1Click:Connect(function()
     local RunService = game:GetService("RunService") or game:FindFirstDescendant("RunService")
     local Players = game:GetService("Players") or game:FindFirstDescendant("Players")
@@ -139,30 +162,27 @@ buttonAutoParry.MouseButton1Click:Connect(function()
     end
 end)
 
--- Function para sa Manual Spam button
+-- Function for Manual Spam button
 buttonManualSpam.MouseButton1Click:Connect(function()
- local gui, frame, button = Instance.new("ScreenGui", game.CoreGui), Instance.new("Frame"), Instance.new("TextButton")
-gui.ResetOnSpawn = false
-frame.Size, frame.Position, frame.BackgroundColor3, frame.BorderSizePixel, frame.Active, frame.Draggable, frame.Parent = UDim2.new(0, 150, 0, 75), UDim2.new(0, 10, 0, 10), Color3.new(0, 0, 0), 0, true, true, gui
-button.Text, button.Size, button.Position, button.BackgroundColor3, button.BorderColor3, button.BorderSizePixel, button.Font, button.TextColor3, button.TextSize, button.Parent = "Manual spam", UDim2.new(1, -20, 1, -20), UDim2.new(0, 10, 0, 10), Color3.new(0, 0, 0), Color3.new(), 2, Enum.Font.SourceSans, Color3.new(1, 1, 1), 16, frame
-
-local activated = false
-
-local function toggle()
-    activated, button.Text = not activated, activated and "Off" or "On"
-    
-    while activated do
-        local args = {1.5, CFrame.new(-254.29, 112.14, -119.27) * CFrame.Angles(-2.03, 0.57, 2.31), {["2617721424"] = Vector3.new(-273.40, -724.80, -20.92)}, {910, 154}}
-        game:GetService("ReplicatedStorage").Remotes.ParryAttempt:FireServer(unpack(args))
-        game:GetService("RunService").Heartbeat:Wait()
-        button.BorderColor3 = Color3.new(math.random(), math.random(), math.random())
-    end
-end
-button.MouseButton1Click:Connect(function()
-    toggle()
-    showNotification()
 end)
-        print("Manual Spam activated!")
-        wait(0.1)
-    end
+
+explosionbutton.MouseButton1Click:Connect(function()
+-- explosion
+local args = {
+    [1] = "PromptPurchaseCrate",
+    [2] = workspace.Spawn.Crates.NormalExplosionCrate
+}
+
+game:GetService("ReplicatedStorage").Remote.RemoteFunction:InvokeServer(unpack(args))
+end)
+
+swordbutton.MouseButton1Click:Connect(function()
+-- sword
+local args = {
+    [1] = "PromptPurchaseCrate",
+    [2] = workspace.Spawn.Crates.NormalSwordCrate
+}
+
+game:GetService("ReplicatedStorage").Remote.RemoteFunction:InvokeServer(unpack(args))
+print("Sword Chess Purchased")
 end)
